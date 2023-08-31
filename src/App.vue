@@ -1,26 +1,86 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="indicador" :class="{'rojo': contador < 0, 'verde': contador > 0}"> 
+      <div v-if="contador < 0" class="estado">Negativo</div>
+      <div v-else-if="contador > 0" class="estado">Positivo</div>
+    </div>
+    <div class="contador-container">
+      <button @click="decremento" class="boton">-</button>
+      <span :class="miColor" class="contador">{{ Math.abs(contador) }}</span>
+      <button @click="incremento" class="boton">+</button>
+    </div>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { ref } from "vue";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const miColor = ref("negro");
+const contador = ref(0);
+
+const decremento = () => {
+  contador.value--;
+  updateColorAndIndicator();
+};
+
+const incremento = () => {
+  contador.value++;
+  updateColorAndIndicator();
+};
+
+const updateColorAndIndicator = () => {
+  if (contador.value < 0) {
+    miColor.value = 'rojo';
+  } else if (contador.value > 0) {
+    miColor.value = 'verde';
+  } else {
+    miColor.value = 'negro';
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+.boton {
+  font-size: 24px; 
+  width: 50px; 
+  height: 50px; 
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.indicador {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.estado {
+  font-size: 18px;
+}
+
+.rojo {
+  color: red;
+}
+
+.verde {
+  color: green;
+}
+
+.contador-container {
+  display: flex;
+  align-items: center;
+}
+
+span {
+  padding: 0 5px;
+}
+.contador {
+  font-size: 50px; 
 }
 </style>
